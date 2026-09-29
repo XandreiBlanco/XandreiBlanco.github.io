@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Task Manager</title>
+<style>
+:root{--bg:#f1f5f9;--card:#fff;--bd:#cbd5e1;--fg:#0f172a;--mut:#64748b;--acc:#0284c7;--accfg:#fff;--hi:#ef4444;--md:#f59e0b;--lo:#10b981;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f172a;--card:#1e293b;--bd:#334155;--fg:#f8fafc;--mut:#94a3b8;--acc:#38bdf8;--accfg:#0f172a}}
+:root[data-theme="dark"]{--bg:#0f172a;--card:#1e293b;--bd:#334155;--fg:#f8fafc;--mut:#94a3b8;--acc:#38bdf8;--accfg:#0f172a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Segoe UI',system-ui,-apple-system,Roboto,sans-serif;padding:32px 16px;min-height:100vh}
+.wrap{max-width:720px;margin:0 auto}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:20px}
+h1{margin:0;color:var(--acc);font-size:1.8rem}
+header p{margin:4px 0 0;color:var(--mut)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:16px}
+input,select,button{font:inherit;color:var(--fg)}
+input[type=text],input[type=date],input[type=search],select{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:8px 10px;min-width:0}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+button{background:transparent;border:1px solid var(--bd);border-radius:8px;padding:7px 12px;cursor:pointer}
+button:hover{border-color:var(--acc)}
+.primary{background:var(--acc);color:var(--accfg);border-color:var(--acc);font-weight:700}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.grow{flex:1 1 200px}
+.bar{height:10px;background:var(--bg);border-radius:99px;overflow:hidden;margin-top:8px}
+.bar div{height:100%;width:0;background:var(--acc);transition:width .3s}
+.meta{display:flex;justify-content:space-between;color:var(--mut);font-size:.85rem;font-weight:600}
+.seg button{border-radius:0;margin-left:-1px}
+.seg button:first-child{border-radius:8px 0 0 8px;margin:0}
+.seg button:last-child{border-radius:0 8px 8px 0}
+.seg button.on{background:var(--acc);color:var(--accfg);border-color:var(--acc)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+ul{list-style:none;margin:0;padding:0}
+li.task{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--bd);border-left:4px solid var(--lo);border-radius:10px;padding:12px;margin-bottom:8px}
+li.task.High{border-left-color:var(--hi)}li.task.Medium{border-left-color:var(--md)}
+li.task input[type=checkbox]{width:18px;height:18px;accent-color:var(--acc);flex:none}
+.title{flex:1;min-width:0;font-weight:600;overflow-wrap:anywhere;cursor:text}
+.done .title{text-decoration:line-through;opacity:.5}
+.edit{flex:1;min-width:0}
+.badge{font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--lo);color:#fff;white-space:nowrap}
+.badge.High{background:var(--hi)}.badge.Medium{background:var(--md);color:#0f172a}
+.badge.due{background:transparent;color:var(--mut);border:1px solid var(--bd)}
+.badge.over{background:transparent;color:var(--hi);border-color:var(--hi)}
+.icon{border:none;padding:4px 8px;color:var(--mut)}
+.icon.del:hover{color:var(--hi)}
+.empty{text-align:center;color:var(--mut);padding:28px}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 14px;border-radius:10px;display:none;align-items:center;gap:12px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+#toast button{color:var(--bg);border-color:var(--bg);padding:3px 10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div><h1>✔ Task Manager</h1><p>Organize, prioritize, and track your daily productivity</p></div>
+    <button id="theme" title="Toggle theme" aria-label="Toggle theme">◐</button>
+  </header>
+
+  <div class="card">
+    <div class="meta"><span id="progLabel">No tasks yet</span><span id="progPct">0%</span></div>
+    <div class="bar"><div id="progBar"></div></div>
+  </div>
+
+  <form id="form" class="card row">
+    <input class="grow" type="text" id="title" placeholder="What needs to be done?" maxlength="200" required aria-label="Task title">
+    <select id="priority" aria-label="Priority">
+      <option value="Low">Low</option><option value="Medium" selected>Medium</option><option value="High">High</option>
+    </select>
+    <input type="date" id="due" aria-label="Due date">
+    <button class="primary" type="submit">+ Add</button>
+  </form>
+
+  <div class="tools">
+    <div class="seg row" style="gap:0" id="filters"></div>
+    <input class="grow" type="search" id="search" placeholder="Search ( / )" aria-label="Search tasks">
+    <select id="sort" aria-label="Sort">
+      <option value="new">Newest</option><option value="pri">Priority</option><option value="due">Due date</option>
+    </select>
+    <button id="clear">Clear completed</button>
+  </div>
+
+  <ul id="list"></ul>
+</div>
+<div id="toast"><span id="toastMsg"></span><button id="undo">Undo</button></div>
+
+<script>
+const KEY='portfolioTasks',$=id=>document.getElementById(id);
+let tasks=load(),filter='all',q='',sort='new',prev=null,toastT;
+
+function load(){try{const t=JSON.parse(localStorage.getItem(KEY));return Array.isArray(t)?t:[]}catch(e){return[]}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(tasks))}catch(e){}}
+
+// tiny DOM helper: builds elements with textContent, so user text can never inject HTML
+function h(tag,props={},...kids){
+  const e=document.createElement(tag);
+  for(const k in props){
+    if(k==='class')e.className=props[k];
+    else if(k.startsWith('on'))e.addEventListener(k.slice(2),props[k]);
+    else if(k.includes('-'))e.setAttribute(k,props[k]);
+    else e[k]=props[k];
+  }
+  kids.forEach(x=>e.append(x));return e;
+}
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const RANK={High:0,Medium:1,Low:2};
+
+function visible(){
+  let l=tasks.filter(t=>(filter==='all'||(filter==='active'?!t.completed:t.completed))&&t.title.toLowerCase().includes(q));
+  if(sort==='new')l.sort((a,b)=>b.id-a.id);
+  if(sort==='pri')l.sort((a,b)=>RANK[a.priority]-RANK[b.priority]||b.id-a.id);
+  if(sort==='due')l.sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999')||b.id-a.id);
+  return l;
+}
+function commit(msg,before){
+  save();render();
+  if(msg){prev=before;$('toastMsg').textContent=msg;$('toast').style.display='flex';clearTimeout(toastT);toastT=setTimeout(()=>$('toast').style.display='none',5000)}
+}
+function startEdit(t,span){
+  const inp=h('input',{type:'text',class:'edit',value:t.title,maxLength:200});
+  let done=false;
+  const finish=ok=>{
+    if(done)return;done=true;
+    const v=inp.value.trim();
+    if(ok&&v&&v!==t.title){t.title=v;commit()}else render();
+  };
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')finish(true);if(e.key==='Escape')finish(false)});
+  inp.addEventListener('blur',()=>finish(true));
+  span.replaceWith(inp);inp.focus();inp.select();
+}
+function dueBadge(t){
+  if(!t.due)return null;
+  const td=today(),over=!t.completed&&t.due<td;
+  const label=t.due===td?'Today':new Date(t.due+'T00:00').toLocaleDateString(undefined,{month:'short',day:'numeric'});
+  return h('span',{class:'badge due'+(over?' over':'')},(over?'Overdue · ':'')+label);
+}
+function render(){
+  const list=$('list');list.replaceChildren();
+  const items=visible();
+  if(!items.length){
+    list.append(h('li',{class:'card empty'},tasks.length?'No matching tasks.':'Nothing here yet. Add your first task above!'));
+  }
+  items.forEach(t=>{
+    const span=h('span',{class:'title',title:'Double-click to edit'},t.title);
+    span.addEventListener('dblclick',()=>startEdit(t,span));
+    const li=h('li',{class:'task '+t.priority+(t.completed?' done':'')},
+      h('input',{type:'checkbox',checked:t.completed,'aria-label':'Mark complete',onchange:()=>{t.completed=!t.completed;commit()}}),
+      span,dueBadge(t),
+      h('span',{class:'badge '+t.priority},t.priority),
+      h('button',{class:'icon',title:'Edit','aria-label':'Edit task',onclick:()=>startEdit(t,span)},'✎'),
+      h('button',{class:'icon del',title:'Delete','aria-label':'Delete task',onclick:()=>{const b=tasks.slice();tasks=tasks.filter(x=>x.id!==t.id);commit('Task deleted',b)}},'✕')
+    );
+    list.append(li);
+  });
+  // progress + filter counts
+  const done=tasks.filter(t=>t.completed).length,pct=tasks.length?Math.round(done/tasks.length*100):0;
+  $('progBar').style.width=pct+'%';$('progPct').textContent=pct+'%';
+  $('progLabel').textContent=tasks.length?`${done} of ${tasks.length} done · ${tasks.length-done} left`:'No tasks yet';
+  const counts={all:tasks.length,active:tasks.length-done,completed:done};
+  $('filters').replaceChildren(...['all','active','completed'].map(f=>
+    h('button',{class:filter===f?'on':'',type:'button',onclick:()=>{filter=f;render()}},f[0].toUpperCase()+f.slice(1)+' ('+counts[f]+')')));
+}
+
+$('form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const title=$('title').value.trim();if(!title)return;
+  tasks.push({id:Date.now(),title,priority:$('priority').value,due:$('due').value||null,completed:false});
+  $('title').value='';$('due').value='';$('title').focus();commit();
+});
+$('search').addEventListener('input',e=>{q=e.target.value.trim().toLowerCase();render()});
+$('sort').addEventListener('change',e=>{sort=e.target.value;render()});
+$('clear').addEventListener('click',()=>{
+  if(!tasks.some(t=>t.completed))return;
+  const b=tasks.slice();tasks=tasks.filter(t=>!t.completed);commit('Completed tasks cleared',b);
+});
+$('undo').addEventListener('click',()=>{if(prev){tasks=prev;prev=null;save();render()}$('toast').style.display='none'});
+$('theme').addEventListener('click',()=>{
+  const r=document.documentElement;
+  const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+  r.dataset.theme=dark?'light':'dark';
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='/'&&!/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)){e.preventDefault();$('search').focus()}
+});
+render();
+</script>
+</body>
+</html>
