@@ -3,24 +3,37 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Resume - Start Bootstrap Theme</title>
+        <meta name="description" content="Xandrei Blanco is a front-end developer in Zambales, Philippines. Responsive websites and interactive JavaScript apps for freelance clients." />
+        <meta name="author" content="Xandrei Blanco" />
+        <title>Xandrei Blanco | Front-End Developer</title>
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
-        <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
-        <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+        <!-- Sets saved theme before the page paints (prevents a light flash) -->
+        <script>
+            (function () {
+                try {
+                    var t = localStorage.getItem("theme");
+                    if (!t) { t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; }
+                    document.documentElement.setAttribute("data-theme", t);
+                } catch (e) {}
+            })();
+        </script>
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        <!-- Your customizations (loads after styles.css so it wins) -->
+        <link href="css/custom.css" rel="stylesheet" />
     </head>
     <body id="page-top">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
            <a class="navbar-brand js-scroll-trigger" href="#page-top">
                 <span class="d-block d-lg-none">Xandrei Blanco</span>
-                <span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="assets/img/profile.jpg" alt="..." /></span>
+                <span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="assets/img/profile.jpg" alt="Xandrei Blanco" /></span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -28,6 +41,8 @@
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#projects">Projects</a></li>
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#skills">Skills</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contact</a></li>
+                    <li class="nav-item"><button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false">Dark mode</button></li>
                 </ul>
             </div>
         </nav>
@@ -37,18 +52,22 @@
             <section class="resume-section" id="about">
                 <div class="resume-section-content">
                     <img class="img-fluid img-profile rounded-circle mb-3 d-lg-none" src="assets/img/profile.jpg" alt="Profile Picture" style="width: 120px; height: 120px; object-fit: cover;" />
-                    <h1 class="mb-0">
-                        Xandrei
-                        <span class="text-primary">Blanco</span>
-                    </h1>
+                    <h1 class="mb-0">Xandrei Blanco</h1>
                     <div class="subheading mb-5">
-                        BOTOLAN, ZAMBALES, PHILIPPINES · (+63) 976 542 4473 ·
+                        Botolan, Zambales, Philippines ·
                         <a href="mailto:xandreiblanco123@gmail.com">xandreiblanco123@gmail.com</a>
                     </div>
-                    <p class="lead mb-5">I am an aspiring web developer passionate about building clean, modern websites.</p>
+                    <p class="lead mb-3">Front-end developer. I build responsive websites and interactive JavaScript apps, from landing pages to small web tools.</p>
+                    <p class="availability mb-5"><span class="availability-dot" aria-hidden="true"></span>Available for freelance work</p>
+                    <div class="mb-4">
+  <a class="btn btn-primary me-2"
+   href="https://mail.google.com/mail/?view=cm&fs=1&to=xandreiblanco123@gmail.com&su=Project%20Inquiry"
+   target="_blank" rel="noopener">Hire me</a>
+  <button id="copyEmail" class="btn btn-outline-primary" type="button">Copy email</button> 
+                    </div>
                     <div class="social-icons">
-                        <a class="social-icon" href="https://github.com/XandreiBlanco"><i class="fab fa-github"></i></a>
-                        <a class="social-icon" href="https://www.instagram.com/xandrei_blanco?stkn=MTYwNjlzeGUxZmJneg=="><i class="fab fa-instagram"></i></a>
+                        <a class="social-icon" href="https://github.com/XandreiBlanco" target="_blank" rel="noopener" aria-label="GitHub profile"><i class="fab fa-github"></i></a>
+                        <a class="social-icon" href="https://www.instagram.com/xandrei_blanco" target="_blank" rel="noopener" aria-label="Instagram profile"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
             </section>
@@ -253,17 +272,40 @@
                             <span class="fa-li"><i class="fas fa-check"></i></span>
                             Secure input handling that prevents HTML injection
                         </li>
-                        <li>
-                            <span class="fa-li"><i class="fas fa-check"></i></span>
-                            Testing and debugging in the browser
-                        </li>
                     </ul>
                 </div>
             </section>
-             <hr class="m-0" />
+            <hr class="m-0" />
+            <!-- Contact-->
+            <section class="resume-section" id="contact">
+                <div class="resume-section-content">
+                    <h2 class="mb-3">Contact</h2>
+                    <p class="lead mb-4">Have a project in mind? Send a message and I will reply by email.</p>
+
+                    <form id="contactForm" class="contact-form" novalidate>
+                        <div class="mb-3">
+                            <label for="cName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="cName" name="name" autocomplete="name" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="cEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="cEmail" name="email" autocomplete="email" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="cMessage" class="form-label">Message</label>
+                            <textarea class="form-control" id="cMessage" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" id="cSubmit" class="btn btn-primary">Send message</button>
+                        <p id="formStatus" class="form-status mt-3 mb-0" role="status" aria-live="polite"></p>
+                    </form>
+                </div>
+            </section>
+        </div>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
+        <button id="backToTop" class="btn btn-primary">↑ Top</button>
+<script src="js/portfolio.js"></script>
     </body>
 </html>
