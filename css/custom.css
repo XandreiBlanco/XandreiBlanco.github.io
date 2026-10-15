@@ -1,0 +1,200 @@
+/* ==========================================================
+   custom.css - loads AFTER styles.css, so these rules win.
+   To change the look, edit the colors in the two blocks below.
+   ========================================================== */
+
+:root,
+html[data-theme="light"] {
+  --c-bg: #f5f7f9;
+  --c-surface: #ffffff;
+  --c-text: #15232e;
+  --c-muted: #55656f;
+  --c-line: #dbe2e8;
+  --c-accent: #0b7a75;        /* main accent (buttons, links) */
+  --c-accent-hover: #095f5b;
+  --c-on-accent: #ffffff;     /* text on top of accent */
+  --c-side: #10222d;          /* sidebar background */
+  --c-side-text: rgba(255, 255, 255, 0.72);
+  --c-side-active: #5eead4;
+  --c-ok: #1a9d5b;
+}
+
+html[data-theme="dark"] {
+  --c-bg: #0d1a22;
+  --c-surface: #14262f;
+  --c-text: #e8eef2;
+  --c-muted: #a3b3be;
+  --c-line: #27424f;
+  --c-accent: #4fd1c5;
+  --c-accent-hover: #7ee3da;
+  --c-on-accent: #06222a;
+  --c-side: #08131a;
+  --c-side-text: rgba(255, 255, 255, 0.7);
+  --c-side-active: #5eead4;
+  --c-ok: #4ade80;
+}
+
+/* ---------- Base ---------- */
+html { color-scheme: light; }
+html[data-theme="dark"] { color-scheme: dark; }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+body {
+  font-family: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  background-color: var(--c-bg);
+  color: var(--c-text);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Bricolage Grotesque", "Hanken Grotesk", system-ui, sans-serif;
+  color: var(--c-text);
+  text-transform: none;
+  letter-spacing: -0.02em;
+}
+h1 { font-size: clamp(2.8rem, 7vw, 5.2rem); font-weight: 800; line-height: 1; }
+h2 { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; }
+h3 { font-weight: 700; }
+
+.lead { font-size: 1.2rem; line-height: 1.6; color: var(--c-text); max-width: 38rem; }
+.subheading { text-transform: none; font-family: "Hanken Grotesk", sans-serif; font-size: 1rem; font-weight: 500; color: var(--c-muted); letter-spacing: 0; }
+.text-muted { color: var(--c-muted) !important; }
+.text-primary { color: var(--c-accent) !important; }
+
+a { color: var(--c-accent); }
+a:hover { color: var(--c-accent-hover); }
+
+hr { border-color: var(--c-line); opacity: 1; }
+
+.resume-section { background-color: var(--c-bg); color: var(--c-text); }
+
+:focus-visible { outline: 3px solid var(--c-accent); outline-offset: 3px; }
+
+/* ---------- Sidebar ---------- */
+#sideNav,
+#sideNav.bg-primary {
+  background: var(--c-side) !important;
+}
+#sideNav .navbar-nav .nav-item .nav-link {
+  color: var(--c-side-text);
+  text-transform: none;
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+#sideNav .navbar-nav .nav-item .nav-link:hover { color: #fff; }
+#sideNav .navbar-nav .nav-item .nav-link.active { color: var(--c-side-active); font-weight: 700; }
+#sideNav .navbar-brand { color: #fff; font-family: "Bricolage Grotesque", sans-serif; }
+
+.theme-toggle {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--c-side-text);
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  margin: 0.6rem 0 0 0.5rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.theme-toggle:hover { color: #fff; border-color: #fff; }
+
+/* ---------- Buttons & badges ---------- */
+.btn-primary {
+  background-color: var(--c-accent);
+  border-color: var(--c-accent);
+  color: var(--c-on-accent);
+  font-weight: 700;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: var(--c-accent-hover) !important;
+  border-color: var(--c-accent-hover) !important;
+  color: var(--c-on-accent) !important;
+}
+.btn-outline-primary,
+.btn-outline-secondary {
+  background-color: transparent;
+  border-color: var(--c-line);
+  color: var(--c-text);
+  font-weight: 700;
+}
+.btn-outline-primary:hover,
+.btn-outline-secondary:hover {
+  background-color: var(--c-surface);
+  border-color: var(--c-accent);
+  color: var(--c-accent);
+}
+.badge.bg-primary {
+  background-color: transparent !important;
+  color: var(--c-text);
+  border: 1px solid var(--c-line);
+  font-weight: 500;
+}
+
+/* ---------- Hero ---------- */
+.availability {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+  color: var(--c-text);
+}
+.availability-dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--c-ok);
+}
+
+.social-icon {
+  background-color: var(--c-text) !important;
+  color: var(--c-bg) !important;
+}
+.social-icon:hover { background-color: var(--c-accent) !important; color: var(--c-on-accent) !important; }
+
+/* ---------- Projects ---------- */
+.project-card {
+  background-color: var(--c-surface) !important;
+  color: var(--c-text);
+}
+.project-info h3,
+.project-info p { color: inherit; }
+.project-tag { color: var(--c-muted) !important; }
+
+.carousel-indicators [data-bs-target] { background-color: var(--c-muted); }
+html[data-theme="dark"] .carousel-control-prev-icon,
+html[data-theme="dark"] .carousel-control-next-icon { filter: none !important; }
+
+/* ---------- Skills ---------- */
+.dev-icons { color: var(--c-muted); }
+.dev-icons .list-inline-item i:hover { color: var(--c-accent); }
+.fa-ul .fa-li { color: var(--c-accent); }
+
+/* ---------- Contact form ---------- */
+.contact-form { max-width: 34rem; }
+.form-label { font-weight: 700; }
+.form-control {
+  background-color: var(--c-surface);
+  border: 1px solid var(--c-line);
+  color: var(--c-text);
+}
+.form-control:focus {
+  background-color: var(--c-surface);
+  color: var(--c-text);
+  border-color: var(--c-accent);
+  box-shadow: 0 0 0 0.2rem rgba(79, 209, 197, 0.25);
+}
+.form-status { font-weight: 700; min-height: 1.5rem; }
+.form-status.is-error { color: #d6336c; }
+.form-status.is-success { color: var(--c-ok); }
+
+/* ---------- Back to top ---------- */
+#backToTop {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  display: none;
+  z-index: 1000;
+}
